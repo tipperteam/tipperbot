@@ -37,6 +37,7 @@ def clear_db():
     for table in db:
         db[table] = pd.DataFrame(columns=db[table].columns)
     logger.info("Database is empty!")
+    persist_tables()
 
 def append(table, instance):
     if table not in db:
@@ -49,3 +50,6 @@ def get(table):
     if tb is not None:
         tb = tb.copy()
     return tb
+
+#if __name__ == "__main__":
+#    clear_db()
