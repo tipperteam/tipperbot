@@ -1,14 +1,17 @@
 from tipperbot import account
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from tipperbot.db import append,get, Tables, persist_tables
+
+WALLET_TABLE = Tables.WALLET.value
 
 def buy(bot, update):
     chat_id = update.effective_chat.id
-    account.users[chat_id] += 1
+    append(WALLET_TABLE,{"user_id":chat_id,"amount":1,"reason":"Bought on market."})
 
 
 def spend(bot, update):
     chat_id = update.effective_chat.id
-    account.users[chat_id] -= 1
+    append(WALLET_TABLE,{"user_id":chat_id,"amount":-1,"reason":"Spent on market."})
 
 def market(bot,update):
     keyboard = [[InlineKeyboardButton("Buy 1 Diamond", callback_data='buy'),

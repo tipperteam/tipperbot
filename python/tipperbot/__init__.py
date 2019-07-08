@@ -5,8 +5,14 @@ from tipperbot.market import market
 from tipperbot.odds import odds
 from tipperbot.slip import viewSlip
 from tipperbot.command import handler
+from tipperbot.db import load_tables
+
+from tipperbot.utils.log import get_logger
+logger = get_logger()
 
 if __name__=="__main__":
+    logger.info("Initializing database..")
+    load_tables()
     updater = Updater(get_property("BOT_TOKEN"))
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('start',start))
