@@ -27,12 +27,14 @@ def start(bot, update):
     else:
         bot.send_message(chat_id=chat_id, text="Bentornato!")
 
+def user_credit(user_id):
+    if not is_user_registered(user_id):
+        return -1
+    wallet = get(WALLET_TABLE)
+    wallet = wallet[wallet["user_id"]==user_id]
+    return int(wallet["amount"].sum())
+
 def credit(bot, update):
     chat_id = update.effective_chat.id
-    if not is_user_registered(chat_id):
-
-        bot.send_message(chat_id=chat_id, text="Non sei ancora registrato! Usa /start.")
-    wallet = get(WALLET_TABLE)
-    wallet = wallet[wallet["user_id"]==chat_id]
-    bot.send_message(chat_id=chat_id, text="Diamanti: {}".format(int(wallet["amount"].sum())))
-
+    credit = user_credit(chat_id)
+    bot.send_message(chat_id=chat_id, text="Diamanti: {}".format(credit) if credit > -1 else "Non sei ancora registrato! Usa /start.")

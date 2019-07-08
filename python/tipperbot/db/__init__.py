@@ -7,7 +7,8 @@ from enum import Enum
 class Tables(str,Enum):
     USER = "users",
     WALLET = "wallet",
-    CUR_SLIP = "current_slip"
+    CUR_SLIP = "current_slip",
+    ACC_SLIP = "accepted_slips"
 
 DATA_DIR = get_property("DATA_DIR")
 
@@ -30,6 +31,8 @@ def persist_tables(tables=None):
         tables = [tables]
     for t in tables:
         logger.info("Persisting table {}.".format(t))
+        if t == Tables.CUR_SLIP.value:
+            db[t] = db[t].drop_duplicates(["user_id","match"],keep="last").dropna()
         db[t].to_parquet(os.path.join(DATA_DIR,"{}.parquet".format(t)))
         logger.info("\tDone")
 
@@ -53,5 +56,5 @@ def get(table):
     return tb
 
 #if __name__ == "__main__":
+#    load_tables()
 #    clear_db()
-#load_tables()

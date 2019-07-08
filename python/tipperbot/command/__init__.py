@@ -1,6 +1,6 @@
-from tipperbot.account import credit
+from tipperbot.account import credit, user_credit
 from tipperbot.market import buy, spend
-from tipperbot.slip import addSlip, delSlipMatch
+from tipperbot.slip import addSlip, delSlipMatch, acceptSlip
 
 def handler(bot, update):
     query = update.callback_query
@@ -19,5 +19,11 @@ def handler(bot, update):
     elif query.data[:3] == "del":
         delSlipMatch(chat_id,query.data.split("#")[1])
         query.edit_message_text(text="Evento eliminato.")
+    elif query.data[:6] == "accept":
+        if user_credit(chat_id)> 0:
+            acceptSlip(chat_id)
+            query.edit_message_text(text="Scommessa accettata!")
+        else:
+            query.edit_message_text(text="Non hai abbastanza fondi!")
     else:
         query.edit_message_text(text=query.data)
