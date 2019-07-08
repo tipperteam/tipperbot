@@ -20,6 +20,7 @@ def load_tables():
         table = table_file[:-len(".parquet")]
         logger.info("Importing table {}".format(table))
         db[table] = pd.read_parquet(os.path.join(DATA_DIR,table_file))
+        #print(db[table])
         logger.info("\tImported {} records.".format(len(db[table])))
 
 def persist_tables(tables=None):
@@ -53,3 +54,4 @@ def get(table):
 
 #if __name__ == "__main__":
 #    clear_db()
+#load_tables()
